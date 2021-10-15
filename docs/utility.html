@@ -1,0 +1,740 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Measuring Utility and Information Loss &mdash; SDC Theory Guide  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The SDC Process" href="process.html" />
+    <link rel="prev" title="Anonymization Methods" href="anon_methods.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> SDC Theory Guide
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Content</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary_acr.html">Glossary and list of acronyms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SDC_intro.html">Statistical Disclosure Control (SDC): An Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release_types.html">Release Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="measure_risk.html">Measuring Risk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anon_methods.html">Anonymization Methods</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Measuring Utility and Information Loss</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-utility-measures-for-continuous-and-categorical-variables">General utility measures for continuous and categorical variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general-utility-measures-for-categorical-variables">General utility measures for categorical variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#number-of-missing-values">Number of missing values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#number-of-records-changed">Number of records changed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#comparing-contingency-tables">Comparing contingency tables</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#general-utility-measures-for-continuous-variables">General utility measures for continuous variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#statistics-mean-covariance-correlation">Statistics: mean, covariance, correlation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#il1s-information-loss-measure">IL1s information loss measure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#eigenvalues">Eigenvalues</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utility-measures-based-on-the-end-users-needs">Utility measures based on the end user’s needs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#regression">Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#assessing-data-utility-with-the-help-of-data-visualizations">Assessing data utility with the help of data visualizations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#histograms-and-density-plots">Histograms and density plots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#box-plots">Box plots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mosaic-plots">Mosaic plots</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#choice-of-utility-measure">Choice of utility measure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="process.html">The SDC Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="case_studies.html">Case Studies (Illustrating the SDC Process)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendices.html">Appendices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgements</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SDC Theory Guide</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Measuring Utility and Information Loss</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/utility.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="measuring-utility-and-information-loss">
+<h1>Measuring Utility and Information Loss<a class="headerlink" href="#measuring-utility-and-information-loss" title="Permalink to this headline">¶</a></h1>
+<p>SDC is a trade-off between risk of disclosure and loss of data utility
+and seeks to minimize the latter, while reducing the risk of disclosure
+to an acceptable level. Data utility in this context means the
+usefulness of the anonymized data for statistical analyses by end users
+as well as the validity of these analyses when performed on the
+anonymized data. Disclosure risk and its measurement are defined in
+the Section <a class="reference external" href="measure_risk.html">Measure Risk</a> of this guide.
+In order to make a trade-off between minimizing
+disclosure risk and maximizing utility of data for end users, it is
+necessary to measure the utility of the data after anonymization and
+compare it with the utility of the original data. This section describes
+measures that can be used to compare the data utility before and after
+anonymization, or alternatively quantify the information loss.
+Information loss is the inverse of data utility: the larger the data
+utility after anonymization, the smaller the information loss.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the microdata to be anonymized is based on a sample, the data will incur
+a sampling error. Also other errors may be present in the data, such as
+nonresponse error.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The methods discussed here only measure the
+information loss caused by the anonymization process relative to the
+original sample data and do not attempt to measure the error caused by
+other sources.</p>
+</div>
+<p>Ideally, the information loss is evaluated with respect to the needs and
+uses of the end users of the microdata. However, different end users of
+anonymized data may have very diverse uses for the released data and it
+might not be possible to collect an exhaustive list of these uses. Even
+if many uses can be identified, the characteristics in the data needed
+for these uses can be contradictory (e.g., one user needs a detailed
+geographical level whereas another is interested in a detailed age
+structure and does not need a detailed geographical structure).
+Nevertheless, as pointed out earlier, only one anonymized dataset can be
+released for each dataset and every type of release to avoid unintended
+disclosure. Releasing multiple anonymized datasets for different
+purposes may lead to unintended disclosure. <a class="footnote-reference brackets" href="#foot58" id="id1">1</a>
+Therefore, it is not possible to anonymize and release a file tailored
+to each user’s needs.</p>
+<p>Since collecting and taking into account all data uses is often
+impossible, we also look at general (or generic) information loss
+measures besides user- and data-specific information loss measures.
+These measures do not take into account the specific data use, but can
+be used as guiding measures for information loss and evaluating whether
+a dataset is still analytically valid after anonymization. The main idea
+for such measures is to compare records between the original and treated
+datasets and compare statistics computed from both datasets (<a class="reference internal" href="#hdfg12">HDFG12</a>).
+Examples of such measures are the number of suppressions,
+number of changed values, changes in contingency tables and changes in
+mean and covariance matrices.</p>
+<p>Many of the SDC methods discussed earlier are parametric, in the sense
+that their outcome depends on parameters chosen by the user. Examples
+are the cluster size for microaggregation (see the Section
+<a class="reference external" href="anon_methods.html#Microaggregation">Microaggregation</a>) or the
+importance vector in local suppression (see the Section
+<a class="reference external" href="anon_methods.html#Localsuppression">Local suppression</a>). Data utility
+and information loss measures are useful for choosing these parameters
+by comparing the impact of different parameters on the information loss.
+<a class="reference internal" href="#fig61"><span class="std std-numref">Fig. 13</span></a> illustrates this by showing the trade-off between the
+disclosure risk and data utility of a hypothetical dataset. The triangle
+represents the original data with full utility and a certain level of
+disclosure risk, which is too high for disclosure. The square represents
+no release of microdata. Although there is no risk of disclosure, there
+is also no utility from the data for users since no data is released.
+The points in between represent the result of applying different SDC
+methods with different parameter specifications. We would select the SDC
+method corresponding to the point, which maximizes the utility, while
+keeping disclosure risk at an acceptable level.</p>
+<div class="figure align-center" id="id2">
+<span id="fig61"></span><img alt="_images/image11.png" src="_images/image11.png" />
+<p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">The trade-off between risk and utility in a hypothetical dataset</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<p>In the following sections, we first propose general utility measures
+independent of data use, and later present an example of a specific
+measure useful to measure information loss with respect to specific data
+uses. Finally, we show how to visualize changes in the data caused by
+anonymization and discuss the selection of utility measures for a
+particular dataset.</p>
+<div class="section" id="general-utility-measures-for-continuous-and-categorical-variables">
+<h2>General utility measures for continuous and categorical variables<a class="headerlink" href="#general-utility-measures-for-continuous-and-categorical-variables" title="Permalink to this headline">¶</a></h2>
+<p>General or generic measures of information loss can be divided into
+those comparing the actual values of the raw and anonymized data, and
+those comparing statistics from both datasets. All measures are a
+posteriori, since they measure utility after anonymization and require
+both the data before and after the anonymization process. General
+utility measures are different for categorical and continuous variables.</p>
+<div class="section" id="general-utility-measures-for-categorical-variables">
+<h3>General utility measures for categorical variables<a class="headerlink" href="#general-utility-measures-for-categorical-variables" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="number-of-missing-values">
+<h4>Number of missing values<a class="headerlink" href="#number-of-missing-values" title="Permalink to this headline">¶</a></h4>
+<p>An informative measure is to compare the number of missing values in the
+data. Missing values are often introduced after suppression and more
+suppressions indicate a higher degree of information loss.
+More generally, it is possible to count and compare the number of
+missing values in the original data and the treated data. This can be
+useful to see the proportional increase in the number of missing values.
+Missing values can also have other sources, such as nonresponse.</p>
+</div>
+<div class="section" id="number-of-records-changed">
+<h4>Number of records changed<a class="headerlink" href="#number-of-records-changed" title="Permalink to this headline">¶</a></h4>
+<p>Another useful statistic is the number of records changed per variable.
+The number of records changed gives a good indication of the impact of the
+anonymization methods on the data.</p>
+</div>
+<div class="section" id="comparing-contingency-tables">
+<h4>Comparing contingency tables<a class="headerlink" href="#comparing-contingency-tables" title="Permalink to this headline">¶</a></h4>
+<p>A useful way to measure information loss in categorical variables is to
+compare univariate tabulations and, more interestingly, contingency
+tables (also cross tabulations or two-way tables) between pairs of
+variables. To maintain the analytical validity of a dataset, the
+contingency tables should stay approximately the same.</p>
+<p><a class="reference internal" href="#doto01b">DoTo01b</a> propose a Contingency Table-Based
+Information Loss (CTBIL) measure, which quantifies the distance between
+the contingency tables in the original and treated data. Alternatively,
+visualizations of the contingency table with mosaic plots can be used to
+compare the impact of anonymization methods on the tabulations and
+contingency tables (see the Section <a class="reference internal" href="#mosaic-plots">Mosaic plots</a>).</p>
+</div>
+</div>
+<div class="section" id="general-utility-measures-for-continuous-variables">
+<h3>General utility measures for continuous variables<a class="headerlink" href="#general-utility-measures-for-continuous-variables" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="statistics-mean-covariance-correlation">
+<h4>Statistics: mean, covariance, correlation<a class="headerlink" href="#statistics-mean-covariance-correlation" title="Permalink to this headline">¶</a></h4>
+<p>The statistics characterizing the dataset should not change after the
+anonymization. Examples of such statistics are the mean, variance, and
+covariance and correlation structure of the most important variables in
+the dataset. Other statistics characterizing the data include the
+principal components and the loadings. <a class="reference internal" href="#doto01b">DoTo01b</a>
+give an overview of statistics that can be considered. In order to
+evaluate the information loss caused by the anonymization, one should
+compare the appropriate statistics for continuous variables computed
+from the data before and after anonymization. There are several ways to
+evaluate the loss of utility with respect to the changes in these
+statistics, for instance, by comparing means and (co-)variances in the
+data or comparing the (multivariate) distributions of the data.
+Especially changes in the correlations gives valuable information on the
+validity of the data for regressions.</p>
+<p><a class="reference internal" href="#doto01b">DoTo01b</a> propose several measures for the
+discrepancy between the covariance and correlation matrices. These
+measures are based on the mean squared error, the mean absolute error or
+the mean variation of the individual cells. We refer to <a class="reference internal" href="#doto01b">DoTo01b</a> for a complete overview of these measures.</p>
+</div>
+<div class="section" id="il1s-information-loss-measure">
+<h4>IL1s information loss measure<a class="headerlink" href="#il1s-information-loss-measure" title="Permalink to this headline">¶</a></h4>
+<p>Alternatively, we can also compare the actual data and quantify the
+distance between the original dataset <span class="math notranslate nohighlight">\(X\)</span> and the treated dataset
+<span class="math notranslate nohighlight">\(Z\)</span>. Here <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Z\)</span> contain only continuous
+variables. <a class="reference internal" href="#yawc02">YaWC02</a> introduce the distance
+measure IL1s, which is the sum of the absolute distances between the
+corresponding observations in the raw and anonymized datasets, which are
+standardized by the standard deviation of the variables in the original
+data. For the continuous variables in the dataset, the IL1s measure is
+defined as</p>
+<div class="math notranslate nohighlight">
+\[IL1s = \frac{1}{\text{pn}}\sum_{j = 1}^{p}{\sum_{i = 1}^{n}\frac{\left| x_{\text{ij}} - z_{\text{ij}} \right|}{\sqrt{2}S_{j}}},\]</div>
+<p>where <span class="math notranslate nohighlight">\(p\)</span> is the number of continuous variables; <span class="math notranslate nohighlight">\(n\)</span> is the
+number of records in the dataset; <span class="math notranslate nohighlight">\(x_{\text{ij}}\)</span> and
+<span class="math notranslate nohighlight">\(z_{\text{ij}}\)</span>, respectively, are the values before and after
+anonymization for variable <span class="math notranslate nohighlight">\(j\)</span> and individual <span class="math notranslate nohighlight">\(i\)</span>; and
+<span class="math notranslate nohighlight">\(S_{j}\)</span> is the standard deviation of variable <span class="math notranslate nohighlight">\(j\)</span> in the
+original data (<a class="reference internal" href="#yawc02">YaWC02</a>).</p>
+<p>The measure is useful for comparing different methods. The smaller the
+value of the measure, the closer the values are to the original values
+and the higher the utility.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This measure is related to risk measures based on distance and intervals (see
+the Section <a class="reference external" href="measure_risk.html#Riskmeasuresforcontinuousvariables">Risk measures for continuous variables</a>).</p>
+</div>
+<p>The greater the distance between the original and anonymized values, the
+lower the data utility. Greater distance, however, also reduces the risk
+of re-identification.</p>
+</div>
+<div class="section" id="eigenvalues">
+<h4>Eigenvalues<a class="headerlink" href="#eigenvalues" title="Permalink to this headline">¶</a></h4>
+<p>Another way to evaluate the information loss is to compare the robust
+eigenvalues of the data before and after anonymization. Again, the main use is to compare different methods. The greater the
+value, the greater the changes in the data and the information loss.</p>
+</div>
+</div>
+</div>
+<div class="section" id="utility-measures-based-on-the-end-users-needs">
+<h2>Utility measures based on the end user’s needs<a class="headerlink" href="#utility-measures-based-on-the-end-users-needs" title="Permalink to this headline">¶</a></h2>
+<p>Not all needs and uses of a certain dataset can be inventoried.
+Nevertheless, some types of data have similar uses or important
+characteristics, which can be evaluated before and after anonymization.
+Examples of such “benchmarking indicators” (<a class="reference internal" href="#tmkc14">TMKC14</a>) are
+different for each dataset. Examples include poverty measures for income
+datasets and school attendance ratios. Often ideas for selecting such
+indicators come from the reports data users publish based on previously
+released microdata.</p>
+<p>The approach is to compare the indicators calculated on the untreated
+data and the data after anonymization with different methods. If the
+differences between the indicators are not too large, the anonymized
+dataset can be released for use by researchers. It should be taken into
+account that indicators calculated on samples are estimates with a
+certain variance and confidence interval. Therefore, for sample data, it
+is more informative to compare the overlap of confidence intervals
+and/or to evaluate whether the point estimate calculated after
+anonymization is contained within the confidence interval of the
+original estimate. Examples of benchmark indicators and their confidence
+intervals are included in the case
+studies in these guidelines. Here we give the example of the GINI
+coefficient.</p>
+<p>The GINI coefficient is a measure of statistical dispersion, which is
+often used to measure inequality in income. A way to measure the
+information loss in income data is to compare the income distribution,
+which can be easily done by comparing the GINI coefficients. The GINI
+coefficient of sample data is a random variable. Therefore, it is useful
+to construct a confidence interval around the coefficient to evaluate
+the significance of any change in the coefficient after anonymization.</p>
+</div>
+<div class="section" id="regression">
+<h2>Regression<a class="headerlink" href="#regression" title="Permalink to this headline">¶</a></h2>
+<p>Besides comparing covariance and correlation matrices, regressions are a
+useful tool to evaluate whether the structure in the data is maintained
+after anonymization. By comparing regressions parameters, it is also
+possible to compare relations between non-continuous variables (e.g., by
+introducing dummy variables or regression with ordinal variables). If it
+is known for what purpose and in what field the data is used, common
+regressions can be used to compare the change in coefficients and
+confidence intervals.</p>
+<p>An example of using regression to evaluate the data utility in income
+data is the Mincer equation. The Mincer equation explains earnings as a
+function of education and experience while controlling for other
+variables. The Mincer equation is often used to evaluate the gender pay
+gap and gender wage inequality by including a gender dummy. Here we show
+how to evaluate the impact of anonymization methods on the gender
+coefficient. We regress the log income on a constant, a gender dummy,
+years of education, years of experience, years of experience squared and
+other factors influencing wage.</p>
+<div class="math notranslate nohighlight">
+\[\ln\left( \text{wage} \right) = \beta_{0} + \beta_{1}gender + \beta_{2}education + \beta_{3}experience + \beta_{3}\text{experience}^{2} + \beta X\]</div>
+<p>The parameter of interest here is <span class="math notranslate nohighlight">\(\beta_{1}\)</span>, the effect of
+gender on the log wage. X is a matrix with several other factors
+influencing wage and <span class="math notranslate nohighlight">\(\beta\)</span> the coefficients of these factors.</p>
+<p>If the new estimates fall within the original confidence interval and
+the new and original confidence intervals are greatly overlapping, the
+data can be considered valid for this type of regression after
+anonymization. <a class="reference internal" href="#fig62"><span class="std std-numref">Fig. 14</span></a> shows the point estimates and confidence
+intervals for the gender coefficient in this trade-off for a sample
+income dataset and several SDC methods and parameters. The red dot and
+confidence bar (on the top) correspond to the estimates for the
+untreated data, whereas the other confidence bars correspond to the
+respective SDC methods and different parameters. The anonymization
+reduces the number of expected re-identifications in the data (left
+axis) and the point estimates and confidence intervals vary greatly for
+the different SDC methods. We would choose a method, which reduces the
+expected number of identifications, while not changing the gender
+coefficient and having a great overlap of the confidence interval with
+the confidence interval estimated from the original data.</p>
+<div class="figure align-center" id="id3">
+<span id="fig62"></span><img alt="_images/image12.png" src="_images/image12.png" />
+<p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">Effect of anonymization on the point estimates and confidence interval of the gender coefficient in the Mincer equation</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="assessing-data-utility-with-the-help-of-data-visualizations">
+<h2>Assessing data utility with the help of data visualizations<a class="headerlink" href="#assessing-data-utility-with-the-help-of-data-visualizations" title="Permalink to this headline">¶</a></h2>
+<p>The use of graphs and other visualization techniques is a good way to
+assess at a glance how much the data have changed after anonymization,
+and can aid the selection of appropriate anonymization techniques for
+the data. Visualizations can be a useful tool to assess the impact on
+data utility of anonymization methods and helps choose among
+anonymization methods. The software package <em>R</em> provides several
+functions and packages that can help visualize the results of
+anonymization. This section provides a few examples. We
+present the following visualizations:</p>
+<ul class="simple">
+<li><p>histograms and density plots</p></li>
+<li><p>boxplots</p></li>
+<li><p>mosaic plots</p></li>
+</ul>
+<p>To make appropriate visualizations, we need to use the raw data and the
+anonymized data.</p>
+<div class="section" id="histograms-and-density-plots">
+<h3>Histograms and density plots<a class="headerlink" href="#histograms-and-density-plots" title="Permalink to this headline">¶</a></h3>
+<p>Histograms and density plots are useful for quick comparisons of
+variable distribution before and after anonymization. The advantage of
+histograms is that the results are exact. Visualization depends on the
+bin widths and the start point of the first bin, however. Histograms can
+be used for continuous and semi-continuous variables. Density plots
+display the kernel density of the data; therefore, the plot depends on
+the kernel that is chosen and whether the data fits the kernel well.
+Nevertheless, density plots are a good tool to illustrate the change of
+values and value ranges of continuous variables.</p>
+<p><a class="reference internal" href="#fig63"><span class="std std-numref">Fig. 15</span></a> and <a class="reference internal" href="#fig64"><span class="std std-numref">Fig. 16</span></a> show examples. The histograms and density plots give a clear
+indication how the values have changed: the variability of the data has
+increased and the shape of the distribution has changed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The vertical axes of the histograms have different scales.</p>
+</div>
+<div class="figure align-center" id="id4">
+<span id="fig63"></span><img alt="_images/image13.png" src="_images/image13.png" />
+<p class="caption"><span class="caption-number">Fig. 15 </span><span class="caption-text">Histograms of income before and after anonymization</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-center" id="id5">
+<span id="fig64"></span><img alt="_images/image14.png" src="_images/image14.png" />
+<p class="caption"><span class="caption-number">Fig. 16 </span><span class="caption-text">Density plots of income before and after anonymization</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="box-plots">
+<h3>Box plots<a class="headerlink" href="#box-plots" title="Permalink to this headline">¶</a></h3>
+<p>Box plots give a quick overview of the changes in the spread and
+outliers of continuous variables before and after anonymization.
+<a class="reference internal" href="#fig65"><span class="std std-numref">Fig. 17</span></a> shows an example for an expenditure variable
+after adding noise. The box plot shows clearly that the variability in
+the expenditure variable increased as a result of the anonymization
+methods applied.</p>
+<div class="figure align-center" id="id6">
+<span id="fig65"></span><img alt="_images/image15.png" src="_images/image15.png" />
+<p class="caption"><span class="caption-number">Fig. 17 </span><span class="caption-text">Example of box plots of an expenditure variable before and after anonymization</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="mosaic-plots">
+<h3>Mosaic plots<a class="headerlink" href="#mosaic-plots" title="Permalink to this headline">¶</a></h3>
+<p>Univariate and multivariate mosaic plots are useful for showing changes
+in the tabulations of categorical variables, especially when comparing
+several “scenarios” next to one another. A scenario here refers to the
+choice of anonymization methods and their parameters. With mosaic plots
+we can, for instance, quickly see the effect of different levels of
+<span class="math notranslate nohighlight">\(k\)</span>-anonymity or differences in the importance vectors in the
+local suppression algorithm (see the Section <a class="reference external" href="anon_methods.html#Localsuppression">Local suppression</a>).</p>
+<p>We illustrate the changes in tabulations with an example of the variable
+“WATER” before and after applying PRAM. We can use mosaic plots to
+quickly see the changes for each category. Looking at
+the mosaic plot in <a class="reference internal" href="#fig66"><span class="std std-numref">Fig. 18</span></a> we see invariant PRAM has virtually no
+influence on the univariate distribution.</p>
+<div class="figure align-center" id="id7">
+<span id="fig66"></span><img alt="_images/image16.png" src="_images/image16.png" />
+<p class="caption"><span class="caption-number">Fig. 18 </span><span class="caption-text">Mosaic plot to illustrate the changes in the WATER variable</span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</div>
+<p>We use the variables “gender” and “relationship status” to illustrate
+the use of mosaic plots for the illustration of changes in univariate
+tabulations introduced by several sets of anonymization methods. <a class="reference internal" href="#tab61"><span class="std std-numref">Table 19</span></a>
+provides the methods applied in each scenario. Scenario 0, the base
+scenario, shows the original categories of the gender and relationship
+status variables, while scenarios 1 to 6 show shifts in the categories
+after applying different anonymization techniques. Table 6.1 provides a
+description of the anonymization methods used in each scenario. In total
+we visualize the impact of six different sets of anonymization methods.
+We can use mosaic plots to quickly see which set of methods has what
+impact on the gender and relationship status variables, which can be
+used to select the best scenario. Looking at the mosaic plots in <a class="reference internal" href="#fig67"><span class="std std-numref">Fig. 19</span></a> ,
+we see that scenarios 2, 5 and 6 give the smallest changes for the
+gender variable and scenarios 3 and 4 for the relationship status
+variable.</p>
+<span id="tab61"></span><table class="colwidths-auto docutils align-center" id="id8">
+<caption><span class="caption-number">Table 19 </span><span class="caption-text">Description of anonymization methods by scenario</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Scenario</p></th>
+<th class="head"><p>Description of anonymization
+methods applied</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0 (base)</p></td>
+<td><p>Original data, no treatment</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Recode age (five-year intervals),
+plus local suppression (required
+k = 3, high importance on water,
+toilet and literacy variables)</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Recode age (five-year intervals),
+plus local suppression (required
+k = 5, no importance vector)</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>Recode age (five-year intervals),
+plus local suppression (required
+k = 3, high importance on
+toilet), while also recoding
+region, urban, education level
+and occupation variables</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>Recode age (five-year steps),
+plus local suppression (required
+k = 5, high importance on water,
+toilet and literacy), while also
+recoding region, urban, education
+level and occupation variables</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>Recode age (five-year intervals),
+plus local suppression (required
+k = 3, no importance vector),
+microaggregation (wealth index),
+while also recoding region,
+urban, education level and
+occupation variables</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>Recode age (five-year intervals)
+plus local suppression (required
+k=3, no importance vector), PRAM
+literacy, while also recoding
+region, urban, education level
+and occupation variables</p></td>
+</tr>
+</tbody>
+</table>
+<div class="figure align-center" id="id9">
+<span id="fig67"></span><img alt="_images/image17.png" src="_images/image17.png" />
+<p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">Comparison of treated vs. untreated gender and relationship status variables with mosaic plots</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</div>
+<p>As we discussed in the Section
+<a class="reference external" href="anon_methods.html#PRAM(PostRAndomizationMethod)">PRAM (Post RAndomization Method)</a>
+, invariant PRAM preserves the
+univariate distributions. Therefore, in this case it is more interesting
+to look at the multivariate mosaic plots. Mosaic plots are also a
+powerful tool to show changes in cross-tabulations/contingency tables. To
+compare the changes, we need to compare two different plots. <a class="reference internal" href="#fig68"><span class="std std-numref">Fig. 20</span></a>
+and <a class="reference internal" href="#fig69"><span class="std std-numref">Fig. 21</span></a> illustrate that (invariant) PRAM does not preserve the
+two-way tables in this case.</p>
+<div class="figure align-center" id="id10">
+<span id="fig68"></span><img alt="_images/image18.png" src="_images/image18.png" />
+<p class="caption"><span class="caption-number">Fig. 20 </span><span class="caption-text">Mosaic plot of the variables ROOF and TOILET before anonymization</span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-center" id="id11">
+<span id="fig69"></span><img alt="_images/image19.png" src="_images/image19.png" />
+<p class="caption"><span class="caption-number">Fig. 21 </span><span class="caption-text">Mosaic plot of the variables ROOF and TOILET after anonymization</span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+<div class="section" id="choice-of-utility-measure">
+<h2>Choice of utility measure<a class="headerlink" href="#choice-of-utility-measure" title="Permalink to this headline">¶</a></h2>
+<p>Besides the users’ requirements on the data, the utility measures should
+be chosen in accordance with the variable types and anonymization
+methods employed. The employed utility measures can be a combination of
+both general and user-specific measures. As discussed earlier, different
+utility measures should be used for continuous and categorical data.
+Furthermore, some utility measures are not informative after certain
+anonymization methods have been applied. For example, after applying
+perturbative methods that interchange data values, comparing values
+directly is not useful because they will give the impression of high
+levels of information loss. In such cases, it is more informative to
+look at means, covariances and benchmarking indicators that can be
+computed from the data. Furthermore, it is important not only to focus
+on the characteristics of variables one by one, but also on the
+interactions between variables. This can be done by cross-tabulations
+and regressions. In general, when anonymizing sampled data, it is
+advisable to compute confidence intervals around estimates to interpret
+the magnitude of changes.</p>
+<div class="admonition-recommended-reading-material-on-measuring-utility-and-information-loss admonition">
+<p class="admonition-title">Recommended Reading Material on Measuring Utility and Information Loss</p>
+<p>A.G. De Waal and L.C.R.J. Willenborg. 1999. “Information Loss through
+Global Recoding and Local Suppression” In Netherlands Official
+Statistics: Special Issue on SDC, 14, 17-10.</p>
+<p>J. Domingo-Ferrer, J.M. Mateo-Sanz and V. Torra. 2001. “Comparing SDC
+Methods for Microdata on the basis of Information Loss and Disclosure
+Risk”. In Pre-proceedings of ETK-NTTS 2001 (vol. 2), 807-826.
+<a class="reference external" href="http://neon.vb.cbs.nl/casc/NTTSJosep.pdf">http://neon.vb.cbs.nl/casc/NTTSJosep.pdf</a></p>
+<p>J. Domingo-Ferrer and V. Torra. 2001. “Disclosure Protection Methods and
+Information Loss for Microdata”. In P. Doyle, J.I. Lane, J.J.M. Theeuwes
+and L. Zayatz (eds.) <em>Theory and Practical Applications for Statistical
+Agencies</em>, 91-110, Amsterdam.
+<a class="reference external" href="http://crises-deim.urv.cat/webCrises/publications/bcpi/cliatpasa01Disclosure.pdf">http://crises-deim.urv.cat/webCrises/publications/bcpi/cliatpasa01Disclosure.pdf</a></p>
+</div>
+<dl class="footnote brackets">
+<dt class="label" id="foot58"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>It is possible to release data files for different groups of users,
+e.g., PUF and SUF. All information in the less detailed file,
+however, must also be included in the more detailed file to prevent
+unintended disclosure. Datasets released in data enclaves can be
+customized for the user, since the risk that they will be combined
+with other version is zero.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="citation">
+<dt class="label" id="doto01b"><span class="brackets">DoTo01b</span></dt>
+<dd><p>Domingo-Ferrer, J., &amp; Torra, V. (2001).
+<strong>Disclosure Protection Methods and Information Loss for Microdata.</strong>
+In P. Doyle, J. Lane, J. Theeuwes, &amp; Z. L., Theory and Practical Applications for Statistical Agencies (pp. 91-110). Amsterdam.</p>
+</dd>
+<dt class="label" id="hdfg12"><span class="brackets">HDFG12</span></dt>
+<dd><p>Hundepool, A., Domingo-Ferrer, J., Franconi, L., Giessing, S., Nordholt, E. S., Spicer, K., et al. (2012).
+<strong>Statistical Disclosure Control.</strong>
+Chichester, UK: John Wiley &amp; Sons Ltd.</p>
+</dd>
+<dt class="label" id="tmkc14"><span class="brackets">TMKC14</span></dt>
+<dd><p>Templ, M., Meindl, B., Kowarik, A., &amp; Chen, S. (2014, August 1).
+<strong>Introduction to Statistical Disclosure Control (SDC).</strong>
+Retrieved July 9, 2018, from <a class="reference external" href="http://www.ihsn.org/home/software/disclosure-control-toolbox">http://www.ihsn.org/home/software/disclosure-control-toolbox</a>.</p>
+</dd>
+<dt class="label" id="yawc02"><span class="brackets">YaWC02</span></dt>
+<dd><p>Yancey, W. W., Winkler, W. E., &amp; Creecy, R. H. (2002).
+<strong>Disclosure Risk Assessment in Perturbative Microdata Protection.</strong>
+Research Report Series , Statistics 2002-01.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="process.html" class="btn btn-neutral float-right" title="The SDC Process" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="anon_methods.html" class="btn btn-neutral float-left" title="Anonymization Methods" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, International Household Survey Network
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
